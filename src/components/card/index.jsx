@@ -3,7 +3,7 @@ import Image from "next/image"
 import cardIcon from "../../../public/cardIcon.svg"
 import shareIcon from "../../../public/shareIcon.svg"
 
-const Card = ({ data, onOpenModal  }) => {
+const Card = ({ data, onOpenModal }) => {
 
   const formatDate = (date) => {
     const d = new Date(date);
@@ -31,7 +31,7 @@ const Card = ({ data, onOpenModal  }) => {
           <span className="text-[12px] font-normal text-[#7F8EA3]">{formatDate(data.created_at)}</span>
         </div>
       </div>
-      <div className="flex bg-[#0F1629] py-3 px-4 gap-1 rounded-md shadow-lg border border-custom-border">
+      <div className="flex bg-[#0F1629] py-3 px-4 gap-1 rounded-md shadow-lg border border-custom-border hover:bg-[#7F8EA3] transition-all">
         <Image src={shareIcon} width={16} height={16} alt="icone de compartilhamento" />
         <button
           onClick={() => onOpenModal(data)}

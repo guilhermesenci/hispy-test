@@ -34,8 +34,8 @@ const Form = () => {
 
   const validateForm = () => {
     const errors = {};
-    if (!formData.nome) errors.name = 'Nome é requerido';
-    if (!formData.link) errors.message = 'Link de redirecionamento é obrigatório';
+    if (!formData.nome) errors.nome = 'Nome é requerido';
+    if (!formData.link) errors.link = 'Link de redirecionamento é obrigatório';
     return errors;
   };
 
@@ -98,8 +98,8 @@ const Form = () => {
           value={formData.descricao}
         />
         <InputText
-          label="Como quer chamar a sua investigação"
-          placeholder="Dê um nome a sua invesitgação"
+          label="Para onde deseja redirecionar o alvo?"
+          placeholder="Escreva o link para redirecionar o alvo"
           footerLabel="Depois de clicar no Link de Captura, o alvo será direcionado para a URL acima."
           name="link"
           value={formData.link}
