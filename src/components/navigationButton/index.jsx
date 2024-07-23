@@ -15,7 +15,7 @@ const NavigationButton = ({ text = "Example", destiny }) => {
     <button
       onClick={handleNavigation}
       className="bg-transparent border-none text-black cursor-pointer">
-      <div className="flex gap-1 bg-[#F8FAFC] p-2 text-black rounded-md text-sm">
+      <div className="flex gap-1 bg-[#F8FAFC] p-2 text-black rounded-md text-sm hover:bg-[#9e9d9d] transition-all">
         <Image src={plusIcon} width={14} height={14} alt="Plus icon" />
         <span>
           {text}

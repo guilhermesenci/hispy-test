@@ -24,7 +24,7 @@ const Modal = ({ isOpen, onClose, children }) => {
         <div className="flex flex-row-reverse">
           <button
             onClick={handleOverlayClick}
-            className="bg-[#0F1629] py-3 px-4 mt-9 rounded-md shadow-lg border border-custom-border">Fechar</button>
+            className="bg-[#0F1629] py-3 px-4 mt-9 rounded-md shadow-lg border border-custom-border hover:bg-[#7F8EA3] transition-all">Fechar</button>
         </div>
       </div>
     </div>

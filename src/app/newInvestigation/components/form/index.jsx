@@ -34,8 +34,8 @@ const Form = () => {
 
   const validateForm = () => {
     const errors = {};
-    if (!formData.nome) errors.name = 'Nome é requerido';
-    if (!formData.link) errors.message = 'Link de redirecionamento é obrigatório';
+    if (!formData.nome) errors.nome = 'Nome é requerido';
+    if (!formData.link) errors.link = 'Link de redirecionamento é obrigatório';
     return errors;
   };
 
