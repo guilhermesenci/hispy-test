@@ -19,7 +19,7 @@ const Modal = ({ isOpen, onClose, children }) => {
       onClick={handleOverlayClick}
       className="fixed inset-0 flex items-center justify-center z-40 bg-black bg-opacity-50"
     >
-      <div className="bg-[#020204] p-10 rounded-md shadow-lg max-w-2xl border z-50 border-custom-border">
+      <div className="bg-[#020204] p-10 rounded-2xl shadow-lg max-w-2xl border z-50 border-custom-border">
         {children}
         <div className="flex flex-row-reverse">
           <button

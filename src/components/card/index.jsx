@@ -14,7 +14,7 @@ const Card = ({ data, onOpenModal  }) => {
   };
 
   return (
-    <div className="flex border border-custom-border rounded-md bg-[#030711] p-5 justify-between">
+    <div className="flex border border-custom-border first:rounded-t-md last:rounded-b-md bg-[#030711] p-5 justify-between">
       <div className="flex">
         <div className="flex w-[400px] overflow-hidden">
           <Image src={cardIcon} width={40} height={40} alt="icon status" />

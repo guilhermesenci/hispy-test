@@ -4,16 +4,22 @@ import { useEffect, useState } from "react";
 import supabase from "../lib/supabaseClient";
 
 import alertIcon from "../../public/alertIcon.svg";
+import copyIcon from "../../public/copyIcon.svg";
 
 import NavigationButton from "@/components/navigationButton";
 import Card from "@/components/card";
 import Modal from "@/components/modal";
+import Button from "@/components/button";
 
 const Home = () => {
   const [investigation, setInvestigation] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedData, setSelectedData] = useState(null);
+
+  const handleCopy = (value) => {
+    navigator.clipboard.writeText(value.link);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -91,16 +97,27 @@ const Home = () => {
           </div>
         </main>
       )}
+
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         {selectedData && (
-          <div>
-            <h2 className="text-xl font-bold">Informações da Investigação</h2>
-            <p>{selectedData.nome}</p>
-            <p>
-              Criada em:
-              {new Date(selectedData.created_at).toLocaleDateString("pt-BR")}
-            </p>
-            {/* Outros detalhes da investigação */}
+          <div className="bg-[#030711] py-5 px-6 mt-9 rounded-md shadow-lg border border-custom-border">
+            <div className="flex flex-col gap-[6px]">
+              <p className="text-base font-bold">Link de captura</p>
+              <p className="text-sm">
+                Com ele você obterá apenas o IP do alvo. A geolocalização não é
+                precisa.
+              </p>
+            </div>
+            <div className="flex gap-2 w-full pt-4">
+              <p className="flex-grow border py-[6px] px-3 bg-[#09090B] rounded-md border-custom-border overflow-hidden overflow-ellipsis whitespace-nowrap text-center">
+                {selectedData.link}
+              </p>
+              <Button
+                img={copyIcon}
+                text="Copiar link"
+                onclick={() => handleCopy(selectedData)}
+              />
+            </div>
           </div>
         )}
       </Modal>
