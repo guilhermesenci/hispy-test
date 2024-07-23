@@ -33,3 +33,17 @@
   background: linear-gradient(90deg, #bd0147 100%, #bd5001 100%);
   transition: background-color 0.3s ease;
 }
+
+::-webkit-scrollbar {
+  width: 4px; 
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #333; 
+  border-radius: 10px; 
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a; 
+  border-radius: 10px;
+}
