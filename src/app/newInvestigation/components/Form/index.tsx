@@ -1,30 +1,44 @@
 "use client"
-import React, { useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 import Image from 'next/image';
 
-import supabase from '../../../../lib/supabaseClient';
+import supabase from '@/lib/supabaseClient';
 
-import InputText from '@/components/inputText';
-import TextArea from '@/components/textArea';
-import Button from '@/components/button';
-import Modal from '@/components/modal';
+import InputText from '@/components/InputText';
+import TextArea from '@/components/TextArea';
+import Button from '@/components/Button';
+import Modal from '@/components/Modal';
 
-import successIcon from "../../../../../public/successIcon.svg"
-import copyIcon from "../../../../../public/copyIcon.svg"
+import successIcon from "@/assets/successIcon.svg"
+import copyIcon from "@/assets/copyIcon.svg"
 
-const Form = () => {
-  const [formData, setFormData] = useState({
+interface FormData {
+  nome: string;
+  descricao: string;
+  link: string;
+}
+
+interface FormErrors {
+  nome?: string;
+  link?: string;
+}
+
+const Form: React.FC = () => {
+  const [formData, setFormData] = useState<FormData>({
     nome: '',
     descricao: '',
     link: '',
   });
 
-  const [formErrors, setFormErrors] = useState({});
-  const [formStatus, setFormStatus] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
+  const [formStatus, setFormStatus] = useState<string>('');
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [modalMessage, setModalMessage] = useState<string>('');
 
-  const handleChange = (e) => {
+  const handleChange = (
+    e:
+      ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -32,14 +46,14 @@ const Form = () => {
     });
   };
 
-  const validateForm = () => {
-    const errors = {};
+  const validateForm = (): FormErrors => {
+    const errors: FormErrors = {};
     if (!formData.nome) errors.nome = 'Nome é requerido';
     if (!formData.link) errors.link = 'Link de redirecionamento é obrigatório';
     return errors;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const errors = validateForm();
     if (Object.keys(errors).length > 0) {
@@ -49,10 +63,14 @@ const Form = () => {
 
     setFormStatus('Enviando...');
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('investigacoes')
         .insert([
-          { nome: formData.nome, descricao: formData.descricao, link: formData.link }
+          {
+            nome: formData.nome,
+            descricao: formData.descricao,
+            link: formData.link
+          }
         ]);
 
       if (error) {

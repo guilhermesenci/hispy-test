@@ -1,26 +1,33 @@
 "use client";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
+import supabase from "@/lib/supabaseClient";
+import alertIcon from "@/assets/alertIcon.svg";
+import copyIcon from "@/assets/copyIcon.svg";
+import NavigationButton from "@/components/NavigationButton";
+import Card from "@/components/Card";
+import Modal from "@/components/Modal";
+import Button from "@/components/Button";
 
-import supabase from "../lib/supabaseClient";
+interface Investigation {
+  id: number;
+  nome: string;
+  descricao: string;
+  link: string;
+  created_at: string;
+}
 
-import alertIcon from "../../public/alertIcon.svg";
-import copyIcon from "../../public/copyIcon.svg";
+const Home: FC = () => {
+  const [investigation, setInvestigation] = useState<Investigation[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [selectedData, setSelectedData] = useState<Investigation | null>(null);
 
-import NavigationButton from "@/components/navigationButton";
-import Card from "@/components/card";
-import Modal from "@/components/modal";
-import Button from "@/components/button";
-
-const Home = () => {
-  const [investigation, setInvestigation] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedData, setSelectedData] = useState(null);
-
-  const handleCopy = (value) => {
-    navigator.clipboard.writeText(value.link);
-  };
+  const handleCopy = (value: Investigation) => {
+    if (value) {
+      navigator.clipboard.writeText(value.link);
+    };
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,7 +44,9 @@ const Home = () => {
           setInvestigation(data);
         }
       } catch (error) {
-        console.error("Erro ao carregar:", error.message);
+        if (error instanceof Error) {
+          console.error("Erro ao carregar:", error.message);
+        }
       } finally {
         setLoading(false);
       }
@@ -53,7 +62,7 @@ const Home = () => {
     );
   }
 
-  const openModal = (data) => {
+  const openModal = (data: Investigation) => {
     setSelectedData(data);
     setIsModalOpen(true);
   };
@@ -85,7 +94,9 @@ const Home = () => {
       ) : (
         <main className="w-full px-52 mt-10">
           <div className="flex w-full justify-between">
-            <span className="text-2xl font-semibold">Ivestigações</span>
+            <span className="text-2xl font-semibold">
+              Investigações
+            </span>
             <NavigationButton
               destiny="newInvestigation"
               text="Nova investigação"
@@ -93,7 +104,13 @@ const Home = () => {
           </div>
           <div className="mt-8 flex flex-col gap-4 overflow-y-scroll max-h-[500px] pr-2">
             {investigation.map((item, key) => {
-              return <Card key={key} data={item} onOpenModal={openModal} />;
+              return (
+                <Card
+                  key={key}
+                  data={item}
+                  handleOpenModal={openModal}
+                />
+              );
             })}
           </div>
         </main>
@@ -116,7 +133,7 @@ const Home = () => {
               <Button
                 img={copyIcon}
                 text="Copiar link"
-                onclick={() => handleCopy(selectedData)}
+                onclick={() => handleCopy(selectedData as Investigation)}
               />
             </div>
           </div>

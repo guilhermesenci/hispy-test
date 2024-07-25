@@ -25,6 +25,7 @@ HI SPY é uma aplicação web para criar e gerenciar investigações baseadas em
 - [Supabase](https://supabase.io/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [React](https://reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
 
 ## Instalação
 
@@ -86,6 +87,7 @@ Para rodar este projeto localmente, siga estas etapas:
 ```plaintext
 ├── public
 ├── src
+│   ├── assets
 │   ├── components
 │   ├── lib
 │   ├── app

@@ -10,12 +10,6 @@
   color: white;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-}
-
 .text-selected:focus ~ .border-bottom {
   border-bottom-color: red;
 }

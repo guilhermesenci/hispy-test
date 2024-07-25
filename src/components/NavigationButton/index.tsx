@@ -2,9 +2,15 @@
 import Image from "next/image"
 import { useRouter } from 'next/navigation';
 
-import plusIcon from "../../../public/plusIcon.svg"
+import plusIcon from "@/assets/plusIcon.svg"
+import { FC } from "react";
 
-const NavigationButton = ({ text = "Example", destiny }) => {
+interface NavigationButtonProps {
+  text: string,
+  destiny: string
+}
+
+const NavigationButton: FC<NavigationButtonProps> = ({ text, destiny }) => {
   const router = useRouter();
 
   const handleNavigation = () => {
