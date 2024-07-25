@@ -2,6 +2,7 @@ import Image from "next/image"
 import { FC } from "react"
 import cardIcon from "@/assets/cardIcon.svg"
 import shareIcon from "@/assets/shareIcon.svg"
+import { format } from "date-fns";
 
 interface Investigation {
   id: number;
@@ -18,12 +19,9 @@ interface CardProps {
 
 const Card: FC<CardProps> = ({ data, handleOpenModal }) => {
 
-  const formatDate = (date: string) => {
+  const formatDate = (date: string): string => {
     const d = new Date(date);
-    const day = String(d.getDate()).padStart(2, '0');
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const year = d.getFullYear();
-    return `${day}/${month}/${year}`;
+    return format(d, 'dd/MM/yyyy');
   };
 
   return (
