@@ -1,31 +1,23 @@
 import Image from "next/image"
-import { FC } from "react"
+import { buttonVariants } from './buttonVariants';
+import { FC, MouseEventHandler } from "react"
 
 interface Button {
   text: string;
+  type: 'PRIMARY' | 'SECONDARY';
   img?: string;
-  onclick?: () => void;
+  onclick?: MouseEventHandler<HTMLButtonElement> | (() => void);
   disabled?: boolean;
 }
 
-const Button: FC<Button> = ({ text, img, onclick, disabled }) => {
+const Button: FC<Button> = ({ text, img, onclick, disabled, type = 'PRIMARY' }) => {
+  const variantClasses = buttonVariants({ type });
+
   return (
     <button
       onClick={onclick}
       disabled={disabled}
-      className={`
-        flex 
-        w-auto 
-        items-center 
-        rounded-md 
-        text-sm 
-        border-none 
-        py-2 px-4 
-        bg-[#F8FAFC] 
-        text-black cursor-pointer 
-        hover:bg-[#9e9d9d] 
-        transition-all
-        `}
+      className={variantClasses}
     >
       {img && <Image src={img} width={12} height={12} alt="incon" />}
       <span className={img ? "ml-1" : ""}>

@@ -4,12 +4,9 @@ import Image from 'next/image';
 import { Formik, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import supabase from '@/lib/supabaseClient';
-import InputText from '@/components/InputText';
-import TextArea from '@/components/TextArea';
-import Button from '@/components/Button';
-import Modal from '@/components/Modal';
 import successIcon from "@/assets/successIcon.svg"
 import copyIcon from "@/assets/copyIcon.svg"
+import { InputText, TextArea, Button, Modal } from '@/components';
 
 interface FormData {
   nome: string;
@@ -97,6 +94,7 @@ const FormComponent: FC = () => {
             />
             <div className='flex flex-row-reverse pt-5 w-full'>
               <Button
+                type='PRIMARY'
                 text="Criar investigação"
                 disabled={isSubmitting}
               />
@@ -127,7 +125,11 @@ const FormComponent: FC = () => {
             <p className='flex-grow border py-[6px] px-3 bg-[#09090B] rounded-md border-custom-border overflow-hidden overflow-ellipsis whitespace-nowrap text-center'>
               {modalMessage}
             </p>
-            <Button img={copyIcon} text="Copiar link" onclick={handleCopy} />
+            <Button
+              type='PRIMARY'
+              img={copyIcon}
+              text="Copiar link"
+              onclick={handleCopy} />
           </div>
         </div>
       </Modal>

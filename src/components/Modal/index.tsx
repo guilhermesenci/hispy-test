@@ -1,5 +1,6 @@
 import { useRouter } from 'next/navigation';
 import { FC, MouseEvent } from 'react';
+import { Button } from "@/components"
 
 interface ModalProps {
   isOpen: boolean;
@@ -28,13 +29,12 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose, children }) => {
     >
       <div className="bg-[#020204] p-10 rounded-2xl shadow-lg max-w-2xl border z-50 border-custom-border">
         {children}
-        <div className="flex flex-row-reverse">
-          <button
-            onClick={handleClose}
-            className="bg-[#0F1629] py-3 px-4 mt-9 rounded-md shadow-lg border border-custom-border hover:bg-[#7F8EA3] transition-all"
-          >
-            Fechar
-          </button>
+        <div className="flex flex-row-reverse mt-8">
+          <Button
+            text="Fechar"
+            onclick={handleClose}
+            type="SECONDARY"
+          />
         </div>
       </div>
     </div>

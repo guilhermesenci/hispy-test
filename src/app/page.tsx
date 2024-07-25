@@ -1,13 +1,12 @@
 "use client";
-import Image from "next/image";
+import Link from 'next/link';
 import { FC, useEffect, useState } from "react";
+import Image from "next/image";
 import supabase from "@/lib/supabaseClient";
 import alertIcon from "@/assets/alertIcon.svg";
 import copyIcon from "@/assets/copyIcon.svg";
-import NavigationButton from "@/components/NavigationButton";
-import Card from "@/components/Card";
-import Modal from "@/components/Modal";
-import Button from "@/components/Button";
+import plusIcon from "@/assets/plusIcon.svg";
+import { Card, Modal, Button } from "@/components";
 
 interface Investigation {
   id: number;
@@ -85,10 +84,13 @@ const Home: FC = () => {
               Criar uma investigação com o HI SPY é simples. Em alguns passos
               sua investigação estará criada.
             </p>
-            <NavigationButton
-              destiny="newInvestigation"
-              text="Nova investigação"
-            />
+            <Link href="/newInvestigation">
+              <Button
+                type="PRIMARY"
+                text="Nova investigação"
+                img={plusIcon}
+              />
+            </Link>
           </div>
         </main>
       ) : (
@@ -97,10 +99,13 @@ const Home: FC = () => {
             <span className="text-2xl font-semibold">
               Investigações
             </span>
-            <NavigationButton
-              destiny="newInvestigation"
-              text="Nova investigação"
-            />
+            <Link href="/newInvestigation">
+              <Button
+                type="PRIMARY"
+                text="Nova investigação"
+                img={plusIcon}
+              />
+            </Link>
           </div>
           <div className="mt-8 flex flex-col gap-4 overflow-y-scroll max-h-[500px] pr-2">
             {investigation.map((item, key) => {
@@ -132,6 +137,7 @@ const Home: FC = () => {
               </p>
               <Button
                 img={copyIcon}
+                type="PRIMARY"
                 text="Copiar link"
                 onclick={() => handleCopy(selectedData as Investigation)}
               />

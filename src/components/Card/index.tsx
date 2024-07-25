@@ -1,8 +1,9 @@
 import Image from "next/image"
 import { FC } from "react"
+import { format } from "date-fns";
 import cardIcon from "@/assets/cardIcon.svg"
 import shareIcon from "@/assets/shareIcon.svg"
-import { format } from "date-fns";
+import { Button } from "@/components";
 
 interface Investigation {
   id: number;
@@ -52,29 +53,13 @@ const Card: FC<CardProps> = ({ data, handleOpenModal }) => {
           </span>
         </div>
       </div>
-      <div
-        onClick={() => handleOpenModal(data)}
-        className={`
-          flex 
-          bg-[#0F1629] 
-          py-3 
-          px-4 
-          gap-1 
-          rounded-md 
-          shadow-lg border 
-          border-custom-border 
-          hover:bg-[#7F8EA3] 
-          transition-all
-          cursor-pointer
-          `}
-      >
-        <Image src={shareIcon} width={16} height={16} alt="icone de compartilhamento" />
-        <button
-          className="text-sm font-normal text-[#E1E7EF]"
-        >
-          Link de captura
-        </button>
-      </div>
+      <Button
+        onclick={() => handleOpenModal(data)}
+        type="SECONDARY"
+        text="Link de captura"
+        img={shareIcon}
+      />
+      {/* className="text-sm font-normal text-[#E1E7EF]" */}
     </div>
   )
 }
