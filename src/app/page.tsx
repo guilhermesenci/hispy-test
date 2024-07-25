@@ -1,26 +1,32 @@
 "use client";
+import Link from 'next/link';
+import { FC, useEffect, useState } from "react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import supabase from "@/lib/supabaseClient";
+import alertIcon from "@/assets/alertIcon.svg";
+import copyIcon from "@/assets/copyIcon.svg";
+import plusIcon from "@/assets/plusIcon.svg";
+import { Card, Modal, Button } from "@/components";
 
-import supabase from "../lib/supabaseClient";
+interface Investigation {
+  id: number;
+  nome: string;
+  descricao: string;
+  link: string;
+  created_at: string;
+}
 
-import alertIcon from "../../public/alertIcon.svg";
-import copyIcon from "../../public/copyIcon.svg";
+const Home: FC = () => {
+  const [investigation, setInvestigation] = useState<Investigation[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [selectedData, setSelectedData] = useState<Investigation | null>(null);
 
-import NavigationButton from "@/components/navigationButton";
-import Card from "@/components/card";
-import Modal from "@/components/modal";
-import Button from "@/components/button";
-
-const Home = () => {
-  const [investigation, setInvestigation] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedData, setSelectedData] = useState(null);
-
-  const handleCopy = (value) => {
-    navigator.clipboard.writeText(value.link);
-  };
+  const handleCopy = (value: Investigation) => {
+    if (value) {
+      navigator.clipboard.writeText(value.link);
+    };
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,7 +43,9 @@ const Home = () => {
           setInvestigation(data);
         }
       } catch (error) {
-        console.error("Erro ao carregar:", error.message);
+        if (error instanceof Error) {
+          console.error("Erro ao carregar:", error.message);
+        }
       } finally {
         setLoading(false);
       }
@@ -53,7 +61,7 @@ const Home = () => {
     );
   }
 
-  const openModal = (data) => {
+  const openModal = (data: Investigation) => {
     setSelectedData(data);
     setIsModalOpen(true);
   };
@@ -76,24 +84,38 @@ const Home = () => {
               Criar uma investigação com o HI SPY é simples. Em alguns passos
               sua investigação estará criada.
             </p>
-            <NavigationButton
-              destiny="newInvestigation"
-              text="Nova investigação"
-            />
+            <Link href="/newInvestigation">
+              <Button
+                type="PRIMARY"
+                text="Nova investigação"
+                img={plusIcon}
+              />
+            </Link>
           </div>
         </main>
       ) : (
         <main className="w-full px-52 mt-10">
           <div className="flex w-full justify-between">
-            <span className="text-2xl font-semibold">Ivestigações</span>
-            <NavigationButton
-              destiny="newInvestigation"
-              text="Nova investigação"
-            />
+            <span className="text-2xl font-semibold">
+              Investigações
+            </span>
+            <Link href="/newInvestigation">
+              <Button
+                type="PRIMARY"
+                text="Nova investigação"
+                img={plusIcon}
+              />
+            </Link>
           </div>
           <div className="mt-8 flex flex-col gap-4 overflow-y-scroll max-h-[500px] pr-2">
             {investigation.map((item, key) => {
-              return <Card key={key} data={item} onOpenModal={openModal} />;
+              return (
+                <Card
+                  key={key}
+                  data={item}
+                  handleOpenModal={openModal}
+                />
+              );
             })}
           </div>
         </main>
@@ -115,8 +137,9 @@ const Home = () => {
               </p>
               <Button
                 img={copyIcon}
+                type="PRIMARY"
                 text="Copiar link"
-                onclick={() => handleCopy(selectedData)}
+                onclick={() => handleCopy(selectedData as Investigation)}
               />
             </div>
           </div>

@@ -1,4 +1,4 @@
-import Form from "./components/form"
+import FormComponent from "./components/Form"
 
 const NewInvestigation = () => {
   return (
@@ -6,7 +6,7 @@ const NewInvestigation = () => {
       <span className="mb-8 start text-2xl font-semibold">
         Nova investigação
       </span>
-      <Form />
+      <FormComponent />
     </div>
   )
 }
