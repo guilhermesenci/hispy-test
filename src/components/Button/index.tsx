@@ -5,12 +5,14 @@ interface Button {
   text: string;
   img?: string;
   onclick?: () => void;
+  disabled?: boolean;
 }
 
-const Button: FC<Button> = ({ text, img, onclick }) => {
+const Button: FC<Button> = ({ text, img, onclick, disabled }) => {
   return (
     <button
       onClick={onclick}
+      disabled={disabled}
       className={`
         flex 
         w-auto 

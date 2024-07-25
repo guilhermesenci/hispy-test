@@ -1,4 +1,4 @@
-import { ChangeEvent, FC } from "react";
+import React, { ChangeEvent, FC, FocusEvent } from "react";
 
 interface InputTextProps {
   label: string;
@@ -7,6 +7,7 @@ interface InputTextProps {
   name: string;
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
   error?: string
 }
 
@@ -16,6 +17,7 @@ const InputText: FC<InputTextProps> = ({
   footerLabel,
   name, value,
   onChange,
+  onBlur,
   error
 }) => {
   return (
@@ -30,6 +32,7 @@ const InputText: FC<InputTextProps> = ({
         value={value}
         onChange={onChange}
         type="text"
+        onBlur={onBlur}
         placeholder={placeholder}
       />
       {error &&

@@ -1,14 +1,13 @@
 "use client"
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { FC, useState } from 'react';
 import Image from 'next/image';
-
+import { Formik, Form, FormikHelpers } from 'formik';
+import * as Yup from 'yup';
 import supabase from '@/lib/supabaseClient';
-
 import InputText from '@/components/InputText';
 import TextArea from '@/components/TextArea';
 import Button from '@/components/Button';
 import Modal from '@/components/Modal';
-
 import successIcon from "@/assets/successIcon.svg"
 import copyIcon from "@/assets/copyIcon.svg"
 
@@ -18,75 +17,38 @@ interface FormData {
   link: string;
 }
 
-interface FormErrors {
-  nome?: string;
-  link?: string;
-}
+const validationSchema = Yup.object({
+  nome: Yup.string().required('Nome é requerido'),
+  link: Yup.string().url('Link deve ser uma URL válida').required('Link de redirecionamento é obrigatório'),
+});
 
-const Form: React.FC = () => {
-  const [formData, setFormData] = useState<FormData>({
-    nome: '',
-    descricao: '',
-    link: '',
-  });
-
-  const [formErrors, setFormErrors] = useState<FormErrors>({});
-  const [formStatus, setFormStatus] = useState<string>('');
+const FormComponent: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalMessage, setModalMessage] = useState<string>('');
 
-  const handleChange = (
-    e:
-      ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const validateForm = (): FormErrors => {
-    const errors: FormErrors = {};
-    if (!formData.nome) errors.nome = 'Nome é requerido';
-    if (!formData.link) errors.link = 'Link de redirecionamento é obrigatório';
-    return errors;
-  };
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const errors = validateForm();
-    if (Object.keys(errors).length > 0) {
-      setFormErrors(errors);
-      return;
-    }
-
-    setFormStatus('Enviando...');
+  const handleSubmit = async (values: FormData, { setSubmitting, resetForm }: FormikHelpers<FormData>) => {
     try {
       const { error } = await supabase
         .from('investigacoes')
         .insert([
           {
-            nome: formData.nome,
-            descricao: formData.descricao,
-            link: formData.link
+            nome: values.nome,
+            descricao: values.descricao,
+            link: values.link
           }
         ]);
 
       if (error) {
-        throw error
-      };
+        throw error;
+      }
 
       setIsModalOpen(true);
-      setFormStatus("")
-      setModalMessage(formData.link)
-      setFormData({
-        nome: '',
-        descricao: '',
-        link: '',
-      });
+      setModalMessage(values.link);
+      resetForm();
     } catch (error) {
-      setFormStatus('Falha no envio.');
+      console.error('Falha no envio.', error);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -98,38 +60,51 @@ const Form: React.FC = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="max-w-md mx-auto flex flex-col gap-5">
-        <InputText
-          label="Como quer chamar a sua investigação"
-          placeholder="Dê um nome a sua invesitgação"
-          name="nome"
-          value={formData.nome}
-          onChange={handleChange}
-          error={formErrors.nome}
-        />
-        <TextArea
-          label="Qual o objetivo dessa investigação?"
-          infoLabel="(opcional)"
-          placeholder="Descreva rapidamente o objetivo dessa investigação"
-          name="descricao"
-          onChange={handleChange}
-          value={formData.descricao}
-        />
-        <InputText
-          label="Para onde deseja redirecionar o alvo?"
-          placeholder="Escreva o link para redirecionar o alvo"
-          footerLabel="Depois de clicar no Link de Captura, o alvo será direcionado para a URL acima."
-          name="link"
-          value={formData.link}
-          onChange={handleChange}
-          error={formErrors.link}
-        />
-        <div className='flex flex-row-reverse pt-5 w-full'>
-          <Button text="Criar investigação" />
-        </div>
-        {formStatus && <p className="mt-4 text-sm">{formStatus}</p>}
-      </form>
-
+      <Formik
+        initialValues={{ nome: "", descricao: "", link: "" }}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ values, handleChange, handleBlur, errors, touched, isSubmitting }) => (
+          <Form className="max-w-md mx-auto flex flex-col gap-5">
+            <InputText
+              label="Como quer chamar a sua investigação"
+              placeholder="Dê um nome a sua invesitgação"
+              name="nome"
+              value={values.nome}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched.nome ? (errors.nome as string) : undefined}
+            />
+            <TextArea
+              label="Qual o objetivo dessa investigação?"
+              infoLabel="(opcional)"
+              placeholder="Descreva rapidamente o objetivo dessa investigação"
+              name="descricao"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.descricao}
+            />
+            <InputText
+              label="Para onde deseja redirecionar o alvo?"
+              placeholder="Escreva o link para redirecionar o alvo"
+              footerLabel="Depois de clicar no Link de Captura, o alvo será direcionado para a URL acima."
+              name="link"
+              value={values.link}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched.link ? (errors.link as string) : undefined}
+            />
+            <div className='flex flex-row-reverse pt-5 w-full'>
+              <Button
+                text="Criar investigação"
+                disabled={isSubmitting}
+              />
+            </div>
+            {isSubmitting && <p className="mt-4 text-sm">Enviando...</p>}
+          </Form>
+        )}
+      </Formik>
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}
@@ -160,4 +135,4 @@ const Form: React.FC = () => {
   );
 };
 
-export default Form;
+export default FormComponent;

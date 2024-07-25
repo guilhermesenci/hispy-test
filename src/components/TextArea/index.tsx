@@ -1,4 +1,4 @@
-import { ChangeEvent, FC } from "react"
+import { ChangeEvent, FC, FocusEvent } from "react"
 
 interface TextAreaProps {
   label: string,
@@ -7,10 +7,20 @@ interface TextAreaProps {
   name: string,
   value: string,
   onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void,
+  onBlur?: (e: FocusEvent<HTMLTextAreaElement>) => void;
   error?: string
 }
 
-const TextArea: FC<TextAreaProps> = ({ label, infoLabel, placeholder, name, value, onChange, error }) => {
+const TextArea: FC<TextAreaProps> = ({
+  label,
+  infoLabel,
+  placeholder,
+  name,
+  value,
+  onChange,
+  onBlur,
+  error
+}) => {
   return (
     <div className="flex flex-col w-full gap-[6px]">
       <span className="text-sm">
@@ -21,6 +31,7 @@ const TextArea: FC<TextAreaProps> = ({ label, infoLabel, placeholder, name, valu
         name={name}
         id={name}
         value={value}
+        onBlur={onBlur}
         onChange={onChange}
         className="text-white resize-none rounded-md bg-[#09090B] p-2 w-full border border-custom-border"
         placeholder={placeholder}
