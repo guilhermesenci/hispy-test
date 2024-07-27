@@ -2,19 +2,12 @@
 import Link from 'next/link';
 import { FC, useEffect, useState } from "react";
 import Image from "next/image";
-import supabase from "@/lib/supabaseClient";
 import alertIcon from "@/assets/alertIcon.svg";
 import copyIcon from "@/assets/copyIcon.svg";
 import plusIcon from "@/assets/plusIcon.svg";
+import { getAllInvestigationData, Investigation } from '@/services/getAllInvestigaionData';
 import { Card, Modal, Button } from "@/components";
-
-interface Investigation {
-  id: number;
-  nome: string;
-  descricao: string;
-  link: string;
-  created_at: string;
-}
+import CardSkeleton from '@/components/SkeletonCard';
 
 const Home: FC = () => {
   const [investigation, setInvestigation] = useState<Investigation[]>([]);
@@ -28,37 +21,33 @@ const Home: FC = () => {
     };
   }
 
+  const fetchData = async () => {
+    const data = await getAllInvestigationData();
+    setInvestigation(data)
+    setLoading(false);
+  }
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data, error } = await supabase
-          .from("investigacoes")
-          .select("*");
-
-        if (error) {
-          throw error;
-        }
-
-        if (data) {
-          setInvestigation(data);
-        }
-      } catch (error) {
-        if (error instanceof Error) {
-          console.error("Erro ao carregar:", error.message);
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
+    fetchData()
   }, []);
 
   if (loading) {
     return (
-      <main className="flex w-full h-[calc(100vh-74px)] items-center justify-center">
-        <p>Carregando...</p>
-      </main>
-    );
+      <main className="flex flex-col px-52 gap-4 w-full h-[calc(100vh-74px)] items-center justify-center">
+        <div className="flex w-full justify-between mb-8">
+          <span className="text-2xl font-semibold">
+            Investigações
+          </span>
+          <Button
+            type="PRIMARY"
+            text="Aguarde..."
+            disabled={true}
+          />
+        </div>
+        {[...Array(5)].map((_, index) => (
+          <CardSkeleton key={index} />
+        ))}
+      </main>);
   }
 
   const openModal = (data: Investigation) => {
@@ -107,7 +96,7 @@ const Home: FC = () => {
               />
             </Link>
           </div>
-          <div className="mt-8 flex flex-col gap-4 overflow-y-scroll max-h-[500px] pr-2">
+          <div className="mt-8 flex flex-col gap-4 overflow-y-scroll h-[70vh] pr-2">
             {investigation.map((item, key) => {
               return (
                 <Card
