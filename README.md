@@ -1,6 +1,6 @@
 # HI SPY - Investigação de IP
 
-![HI SPY Logo](./public/logo.svg)
+![HI SPY Logo](./src/assets/logo.svg)
 
 HI SPY é uma aplicação web para criar e gerenciar investigações baseadas em IP. A aplicação utiliza Next.js para o frontend e Supabase para a gestão de dados.
 
@@ -60,19 +60,19 @@ Para rodar este projeto localmente, siga estas etapas:
 ## Uso
 
 ### Criar Nova Investigação
-![HI SPY Loading](./public/loading.png)
+![HI SPY Loading](./src/assets/loading.png)
 
 1. Clique no botão "Nova Investigação".
-![HI SPY Dashboard](./public/dashboard.png)
+![HI SPY Dashboard](./src/assets/dashboard.png)
 
 2. Preencha os campos necessários no formulário.
-![HI SPY Form](./public/form.png)
+![HI SPY Form](./src/assets/form.png)
 
 3. Clique em "Criar investigação" para salvar a investigação.
-![HI SPY Form](./public/createNewInvestigationSuccess.png)
+![HI SPY Form](./src/assets/createNewInvestigationSuccess.png)
 
 4. Cliquem "Copiar link" para enviar o link para a area de transferência.
-![HI SPY Share Link](./public/copyLink.png)
+![HI SPY Share Link](./src/assets/copyLink.png)
 
 ### Listar Investigações
 
